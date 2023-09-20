@@ -30,7 +30,8 @@
 ERD
 -----
 
-<img width="814" alt="캡처" src="https://github.com/meene11/cart/assets/113295807/117b8fb6-b3d7-4457-8f83-f98c5ca89fe6">
+<img width="558" alt="캡처" src="https://github.com/meene11/cart/assets/113295807/e3dd1bfc-45eb-47ea-b7df-936ccdc5ef15">
+
 
 
 
