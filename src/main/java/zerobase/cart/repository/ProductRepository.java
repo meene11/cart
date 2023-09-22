@@ -5,7 +5,10 @@ import org.springframework.stereotype.Repository;
 import zerobase.cart.domain.Product;
 import zerobase.cart.domain.User;
 
+import java.util.List;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
+    List<Product> findByName(String name);
 }
