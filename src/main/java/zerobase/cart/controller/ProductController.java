@@ -33,7 +33,7 @@ public class ProductController {
         return ResponseEntity.ok(list);
     }
 
-    // 상품명으로 검색
+    // 상품명으로 해당 상품 검색
     @PostMapping("/searchProd")
     public ResponseEntity<?> searchProduct(@RequestBody Product product){
 

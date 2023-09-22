@@ -22,13 +22,11 @@ public class ProductService {
 
     // 상품조회
     public List<Product> getAllProduct(){
-
         return productRepository.findAll();
     }
 
     // 상품명으로 해당상품조회
     public List<Product> searchProduct(String name){
-
         return productRepository.findByName(name);
     }
 
