@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import zerobase.cart.domain.User;
 import zerobase.cart.repository.UserRepository;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -53,6 +53,11 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("비밀번호가 일치하지 않습니다");
         }
 
+        return user;
+    }
+
+    public Optional<User> findById(String userId){
+        Optional<User> user = this.userRepository.findByUserId(userId);
         return user;
     }
 }

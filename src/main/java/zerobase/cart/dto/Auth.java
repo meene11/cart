@@ -1,5 +1,4 @@
 package zerobase.cart.dto;
-
 import lombok.Data;
 import zerobase.cart.domain.User;
 

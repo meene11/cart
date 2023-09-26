@@ -7,6 +7,7 @@ import zerobase.cart.domain.Product;
 import zerobase.cart.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,4 +31,8 @@ public class ProductService {
         return productRepository.findByName(name);
     }
 
+    // 상품ID로 해당상품조회
+    public Optional<Product> findById(int id) {
+        return productRepository.findById(id);
+    }
 }
