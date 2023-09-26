@@ -28,4 +28,8 @@ public class CartService {
         log.info(" null 인지 화ㅓㄱ인!!!! : " + userId);
         return  cartRepository.getMyCartList(userId);
     }
+
+    public List<Item> myItem(int userId){
+        return cartRepository.myItemMyCartList(userId);
+    }
 }

@@ -19,4 +19,8 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     List<Cart> findByUserId(int userId);
     @Query("select p.category, p.name, p.price, c.count from product p inner join cart c on p.id = c.productId where c.userId = :userId")
     List<Object> getMyCartList(@Param("userId") int userId);
+
+
+    @Query("select p.category, p.name, p.price, c.count from product p inner join cart c on p.id = c.productId where c.userId = :userId")
+    List<Item> myItemMyCartList(@Param("userId") int userId);
 }

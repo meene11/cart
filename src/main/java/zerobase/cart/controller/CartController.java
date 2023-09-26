@@ -72,6 +72,9 @@ public class CartController {
         log.info("확인 !!! in controller userId 인티저 id :" + urId);
         List<Object> list = cartService.allMyCart(urId);
 
+//        test
+//        List<Item> itemList = cartService.myItem(urId);
+
         return ResponseEntity.ok(list);
     }
 
