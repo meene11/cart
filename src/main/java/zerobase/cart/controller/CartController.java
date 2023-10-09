@@ -8,6 +8,7 @@ import zerobase.cart.domain.Cart;
 import zerobase.cart.domain.Product;
 import zerobase.cart.domain.User;
 import zerobase.cart.dto.Item;
+import zerobase.cart.dto.ProductDto;
 import zerobase.cart.service.CartService;
 import zerobase.cart.service.ProductService;
 import zerobase.cart.service.UserService;
@@ -69,12 +70,7 @@ public class CartController {
         } else {
             new RuntimeException("ID를 다시 확인해주세요.");
         }
-        log.info("확인 !!! in controller userId 인티저 id :" + urId);
-        List<Object> list = cartService.allMyCart(urId);
-
-//        test
-//        List<Item> itemList = cartService.myItem(urId);
-
+        List<ProductDto> list = cartService.allMyCart(urId);
         return ResponseEntity.ok(list);
     }
 
