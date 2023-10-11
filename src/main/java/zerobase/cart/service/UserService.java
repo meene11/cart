@@ -57,7 +57,12 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> findById(String userId){
+        if(!userRepository.existsByUserId(userId)){
+            new RuntimeException("ID를 다시 확인해주세요.");
+        }
+
         Optional<User> user = this.userRepository.findByUserId(userId);
         return user;
     }
+
 }

@@ -15,12 +15,15 @@ public class ProductDto {
     private String name;
     private int price;
     private int count;
+    private int productId;
 
-    public ProductDto(String category, String name, int price, int count) {
+
+    public ProductDto(String category, String name, int price, int count, int productId) {
         this.category = category;
         this.name = name;
         this.price = price;
         this.count = count;
+        this.productId = productId;
     }
 
 }
