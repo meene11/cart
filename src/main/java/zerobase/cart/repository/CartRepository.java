@@ -20,25 +20,36 @@ import java.util.List;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
     List<Cart> findByUserId(int userId);
-    @Query("select new zerobase.cart.dto.ProductDto(p.category, p.name, p.price, c.count, c.productId) from product p inner join cart c on p.id = c.productId where c.userId = :userId")
+
+    // 장바구니 전체 조회
+    @Query("select new zerobase.cart.dto.ProductDto(c.id, p.category, p.name, p.price, c.count, c.productId) from product p inner join cart c on p.id = c.productId where c.userId = :userId")
     List<ProductDto> getMyCartList(@Param("userId") int userId);
     // dto projection 할 때 클래스 경로까지 맞춰줘야 인식 올바르겜 함.(new zerobase.cart.dto~ 없을시 오류발생)
 
-    @Query("select p.category, p.name, p.price, c.count from product p inner join cart c on p.id = c.productId where c.userId = :userId")
-    List<Item> myItemMyCartList(@Param("userId") int userId);
 
     // 테이블:cart 의 id
     @Query("select id from cart where userId=:userId and productId=:productId")
-    int getCartId(@Param("userId") int userId, @Param("productId") int productId);
+    Integer getCartId(@Param("userId") int userId, @Param("productId") int productId);
 
     // 장바구니 수정
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update cart c set c.count = :count where c.id = :id")
-    int updCartById(@Param("count") int count, @Param("id") int id);
+    Integer updCartById(@Param("count") int count, @Param("id") int id);
 
     boolean existsByProductId(int productId);
 
+    // 장바구니 삭제
+    @Transactional
+    void deleteById(int id);
+
+    // 장바구니 전체 삭제
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query("delete from cart c where c.userId = :intUserId")
+    void deleteAllMyCartById(int intUserId);
+
+    boolean existsById(int id);
 
 
 }

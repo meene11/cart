@@ -2,8 +2,10 @@ package zerobase.cart.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import zerobase.cart.domain.Cart;
 import zerobase.cart.domain.Product;
 import zerobase.cart.domain.User;
@@ -89,7 +91,6 @@ public class CartController {
             new RuntimeException("ID를 다시 확인해주세요.");
         }
 
-        log.info("In Controller: count! "+ request);
         // 2 내 장바구니에 productId 유무 확인
         int productId = Integer.parseInt(strProdId);
         boolean exitUser = cartService.checkProductId(productId);
@@ -97,31 +98,44 @@ public class CartController {
             new RuntimeException("장바구니에 해당 상품이 존재하지 않습니다. 상품ID를 확인해주세요.");
         }
 
-
         Integer intCnt = Integer.parseInt(request);
         if(intCnt == null){
             new RuntimeException("수정할 개수를 기재해주세요");
         }
 
         Optional<Cart> cart = cartService.updateMyCart(intUserId, productId, intCnt);
-//
-
-        /*
-        int cnt = request.getCount();
-        Cart cart = new Cart();
-        cart.setUserId(urId);
-        cart.setProductId(productId);
-        cart.setCount(cnt);
-
-        List<Cart> list = cartService.addCart(cart);
-         */
-
-
 
         return ResponseEntity.ok(cart);
+
     }
 
+    // 장바구니 삭제
+    @DeleteMapping("/delete/{userId}/{cartId}")
+    public ResponseEntity<?> deleteCart(@PathVariable("userId") String userId, @PathVariable("cartId") int cartId){
 
+        Optional<User> user= userService.findById(userId);
+        int intUserId = user.get().getId();
+        List<ProductDto> list = cartService.deleteCart(intUserId, cartId);
 
+        return ResponseEntity.ok(list);
+    }
+
+    // 장바구니 전체항목 삭제
+    @DeleteMapping("/allDelete/{userId}")
+    public ResponseEntity<?> deleteCart(@PathVariable("userId") String userId){
+
+        Optional<User> user = Optional.empty();
+        user= userService.findById(userId);
+        int intUserId = 0;
+        if(user.isPresent()){
+            intUserId = user.get().getId();
+        } else {
+            throw new RuntimeException("ID를 확인해주세요");
+        }
+
+        cartService.allDeleteCart(intUserId);
+
+        return ResponseEntity.ok().build();
+    }
 
 }
