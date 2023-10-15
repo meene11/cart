@@ -16,6 +16,7 @@ import zerobase.cart.dto.ProductDto;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
@@ -35,9 +36,12 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("update cart c set c.count = :count where c.id = :id")
-    Integer updCartById(@Param("count") int count, @Param("id") int id);
+    Optional<Integer> updCartById(@Param("count") int count, @Param("id") int id);
 
     boolean existsByProductId(int productId);
+
+    //  장바구니에 동일상품ID 존재 유무 확인
+    boolean existsByProductIdAndUserId(int productId, int userId);
 
     // 장바구니 삭제
     @Transactional
@@ -50,6 +54,10 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     void deleteAllMyCartById(int intUserId);
 
     boolean existsById(int id);
+
+    // 장바구니 해당 상품의 개수 구하기
+    @Query("select c.count from cart c where c.userId=:userId and c.productId=:productId")
+    Integer getCountByUserIdAndProductId(@Param("userId") int userId, @Param("productId") int productId);
 
 
 }

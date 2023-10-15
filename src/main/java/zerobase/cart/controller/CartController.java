@@ -39,7 +39,7 @@ public class CartController {
            urId = user.get().getId();
            log.info("In Controller:  userId: "+ urId);
         } else {
-            new RuntimeException("ID를 다시 확인해주세요.");
+            throw new RuntimeException("ID를 다시 확인해주세요.");
         }
 
         Optional<Product> product = productService.findById(productId);
@@ -47,7 +47,7 @@ public class CartController {
             String getProductName = product.stream().map(e->e.getName()).toString();
             log.info("In Controller:  getProductName 상품명!!!!: "+ getProductName);
         } else {
-            new RuntimeException("해당 상품이 존재하지 않습니다.");
+            throw new RuntimeException("해당 상품이 존재하지 않습니다.");
         }
 
         int cnt = request.getCount();
@@ -57,7 +57,6 @@ public class CartController {
         cart.setCount(cnt);
 
         List<Cart> list = cartService.addCart(cart);
-
         return ResponseEntity.ok(list);
     }
 
@@ -70,7 +69,7 @@ public class CartController {
             urId = user.get().getId();
             log.info("In Controller:  userId: "+ urId);
         } else {
-            new RuntimeException("ID를 다시 확인해주세요.");
+            throw new RuntimeException("ID를 다시 확인해주세요.");
         }
         List<ProductDto> list = cartService.allMyCart(urId);
         return ResponseEntity.ok(list);
@@ -82,25 +81,25 @@ public class CartController {
         // url :JSON parse  productId={productId} 형태로 받아올때는 타입이 string만 가능 // @RequestBody 또한 string
 
         // 1 userId 확인
-        Optional<User> user= userService.findById(userId);
+        Optional<User> user = Optional.empty();
+        user= userService.findById(userId);
         int intUserId = 0;
-        if(user != null){
+        if(user.isPresent()){
             intUserId = user.get().getId();
-            log.info("In Controller:  userId: "+ intUserId);
         } else {
-            new RuntimeException("ID를 다시 확인해주세요.");
+            throw new RuntimeException("ID를 확인해주세요");
         }
 
         // 2 내 장바구니에 productId 유무 확인
         int productId = Integer.parseInt(strProdId);
         boolean exitUser = cartService.checkProductId(productId);
         if(!exitUser){
-            new RuntimeException("장바구니에 해당 상품이 존재하지 않습니다. 상품ID를 확인해주세요.");
+            throw new RuntimeException("장바구니에 해당 상품이 존재하지 않습니다. 상품ID를 확인해주세요.");
         }
 
         Integer intCnt = Integer.parseInt(request);
         if(intCnt == null){
-            new RuntimeException("수정할 개수를 기재해주세요");
+            throw new RuntimeException("수정할 개수를 기재해주세요");
         }
 
         Optional<Cart> cart = cartService.updateMyCart(intUserId, productId, intCnt);

@@ -23,10 +23,30 @@ public class CartService {
     // 장바구니에 상품 넣기
     public List<Cart> addCart(Cart cart){
         // 장바구니내에 동일상품 존재유무 확인
-        // 존재할경우 cnt 누적 갯수로 저장
-        cartRepository.save(cart);
+
+        int proId = cart.getProductId();
         int userId = cart.getUserId();
-        log.info(" In Cart Service : " + userId);
+
+        int count = 0;
+        int id = 0;
+
+        if(cartRepository.existsByProductIdAndUserId(proId, userId)){
+            // 장바구니id 구하기
+            id  = cartRepository.getCartId(userId, proId);
+
+            log.info("장바구니에 동일 상품이 있습니다. 상품개수 누적하겠습니다." );
+            int cnt = cartRepository.getCountByUserIdAndProductId(userId, proId);
+            int plusCnt = cart.getCount();
+            count = cnt+plusCnt;
+
+            log.info("  합한 갯수 : " + count  + " 기존꺼 cnt:"+cnt + " 추가 새록 :" + plusCnt+ " id" +id);
+            cartRepository.updCartById(count, id);
+        } else {
+            // 존재할경우 cnt 누적 갯수로 저장
+            cartRepository.save(cart);
+            log.info(" In Cart Service : " + userId);
+
+        }
         return cartRepository.findByUserId(userId);
     }
 
@@ -48,15 +68,15 @@ public class CartService {
         log.info("In serivce:  count: " + count);
 
         // 장바구니id 구하기
-        int id = cartRepository.getCartId(userId, productId);
+        int id  = cartRepository.getCartId(userId, productId);
         log.info("In serivce:  get cartId: " + id);
 
 
-        int resultUpd = cartRepository.updCartById(count, id);
+        Optional<Integer> resultUpd = cartRepository.updCartById(count, id);
         log.info("$v   In serivce:  resultUpd: " + resultUpd);
 
         Optional<Cart> cart;
-        if (resultUpd == 1) {
+        if (resultUpd != null) {
             cart = cartRepository.findById(id);
         } else {
             throw new RuntimeException("장바구니 수정에 실패했습니다.");
